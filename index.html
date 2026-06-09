@@ -20,7 +20,7 @@
   #goal-toast.show { transform:translateX(-50%) translateY(0); }
 
   /* YOUTUBE IFRAME HIDDEN */
-  #yt-player { position:fixed; top:-9999px; left:-9999px; width:320px; height:180px; pointer-events:none; z-index:-1; opacity:0; border:none; }
+  #sc-player { position:fixed; top:-9999px; left:-9999px; width:320px; height:180px; pointer-events:none; z-index:-1; opacity:0; border:none; }
 
   /* SPLASH */
   #splash { position:fixed; inset:0; background:linear-gradient(160deg,#FFF0F7 0%,#FFF9EC 50%,#F0FFF9 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:999; text-align:center; padding:2rem; }
@@ -157,7 +157,7 @@
 <body>
 
 <!-- YouTube hidden player -->
-<iframe id="yt-player" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe id="sc-player" src="" frameborder="0" scrolling="no" allow="autoplay"></iframe>
 
 <canvas id="fw-canvas"></canvas>
 <div id="goal-toast">⚽ ¡GOL!</div>
@@ -353,28 +353,29 @@
 </div>
 
 <script>
-// ── YOUTUBE DIRECT IFRAME (no API needed) ──────────────────
-var ytMuted = false;
+// ── SOUNDCLOUD DIRECT IFRAME ───────────────────────────────
+var scMuted = false;
 
-var YT_SRC_PLAY  = 'https://www.youtube.com/embed/ytpTpsXkBpE?si=fQ7EDlx1Ee1dEi5Y&autoplay=1&loop=1&playlist=ytpTpsXkBpE&controls=0&start=45&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=0';
-var YT_SRC_MUTE  = 'https://www.youtube.com/embed/ytpTpsXkBpE?si=fQ7EDlx1Ee1dEi5Y&autoplay=1&loop=1&playlist=ytpTpsXkBpE&controls=0&start=45&iv_load_policy=3&rel=0&modestbranding=1&mute=1&enablejsapi=0';
-var YT_SRC_STOP  = '';
+var SC_SRC_PLAY = 'https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fminecraftdiablo%2Fshakira-dai-dai&color=%23F674AE&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&buying=false&sharing=false&download=false&start_track=0';
+var SC_SRC_MUTE = 'https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fminecraftdiablo%2Fshakira-dai-dai&color=%23F674AE&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&buying=false&sharing=false&download=false&start_track=0';
 
 function startYTMusic() {
-  var iframe = document.getElementById('yt-player');
-  iframe.src = YT_SRC_PLAY;
+  var iframe = document.getElementById('sc-player');
+  iframe.src = SC_SRC_PLAY;
 }
 
 function toggleMusic() {
-  var iframe = document.getElementById('yt-player');
-  if (ytMuted) {
-    iframe.src = YT_SRC_PLAY;
-    ytMuted = false;
+  var iframe = document.getElementById('sc-player');
+  if (scMuted) {
+    // Reload with autoplay to resume
+    iframe.src = SC_SRC_PLAY;
+    scMuted = false;
     document.getElementById('music-label').textContent = 'Música ♫';
     document.getElementById('eq-bars').classList.remove('paused');
   } else {
-    iframe.src = YT_SRC_MUTE;
-    ytMuted = true;
+    // Swap to non-autoplay src effectively pausing
+    iframe.src = SC_SRC_MUTE;
+    scMuted = true;
     document.getElementById('music-label').textContent = 'Silencio';
     document.getElementById('eq-bars').classList.add('paused');
   }
